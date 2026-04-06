@@ -3,7 +3,11 @@ import useEmblaCarousel from "embla-carousel-react";
 import { MilestoneCard } from "./MilestoneCard";
 import { DailyInsightCard } from "./DailyInsightCard";
 
-export function HeroCarousel() {
+interface HeroCarouselProps {
+  isLearningLanguage?: boolean;
+}
+
+export function HeroCarousel({ isLearningLanguage }: HeroCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: false,
     align: "start",
@@ -31,8 +35,8 @@ export function HeroCarousel() {
   );
 
   const slides = [
-    { id: 1, component: <MilestoneCard /> },
-    { id: 2, component: <DailyInsightCard /> },
+    { id: 1, component: <MilestoneCard isLearningLanguage={isLearningLanguage} /> },
+    { id: 2, component: <DailyInsightCard isLearningLanguage={isLearningLanguage} /> },
   ];
 
   return (

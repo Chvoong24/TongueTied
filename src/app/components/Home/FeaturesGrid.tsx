@@ -28,32 +28,36 @@ function FeatureCard({ icon, title, subtitle, bgColor }: FeatureCardProps) {
   );
 }
 
-export function FeaturesGrid() {
+interface FeaturesGridProps {
+  isLearningLanguage?: boolean;
+}
+
+export function FeaturesGrid({ isLearningLanguage }: FeaturesGridProps) {
   return (
     <div className="px-6 mb-6">
       <div className="grid grid-cols-2 gap-4">
         <FeatureCard
           icon={<Bot className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title="AI Interview Simulation"
-          subtitle="Practice CV-based questions."
+          title={isLearningLanguage ? "AI 面接シミュレーション" : "AI Interview Simulation"}
+          subtitle={isLearningLanguage ? "履歴書ベースの質問を練習する" : "Practice CV-based questions."}
           bgColor="#E0F2FE"
         />
         <FeatureCard
           icon={<Video className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title="Peer Practice (Guided)"
-          subtitle="Real-time conversation."
+          title={isLearningLanguage ? "ピア・プラクティス" : "Peer Practice (Guided)"}
+          subtitle={isLearningLanguage ? "リアルタイムの会話" : "Real-time conversation."}
           bgColor="#D1FAE5"
         />
         <FeatureCard
           icon={<Target className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title="Proficiency Exams"
-          subtitle="Goal map & personalization."
+          title={isLearningLanguage ? "語学検定" : "Proficiency Exams"}
+          subtitle={isLearningLanguage ? "目標マップとパーソナライズ" : "Goal map & personalization."}
           bgColor="#E9D5FF"
         />
         <FeatureCard
           icon={<Network className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title="Community Hub"
-          subtitle="Networking & Interests (Opt-In)."
+          title={isLearningLanguage ? "コミュニティハブ" : "Community Hub"}
+          subtitle={isLearningLanguage ? "ネットワーキングと趣味" : "Networking & Interests (Opt-In)."}
           bgColor="#CFFAFE"
         />
       </div>
