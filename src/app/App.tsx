@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ProfileHeader, HeroCarousel, FeaturesGrid, BottomNavigation, ChatPage, NavPage} from "./components";
+import { ProfileHeader, HeroCarousel, FeaturesGrid, BottomNavigation, 
+  ChatPage, NavPage, ProfilePage} from "./components";
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState("Home");
@@ -18,7 +19,7 @@ export default function App() {
                 onToggleLanguage={() => setIsLearningLanguage((prev) => !prev)} 
               />
               <HeroCarousel isLearningLanguage={isLearningLanguage} />
-              <FeaturesGrid isLearningLanguage={isLearningLanguage} />
+              <FeaturesGrid isLearningLanguage={isLearningLanguage} onTabChange={setCurrentTab} />
             </>
           )}
 
@@ -29,10 +30,14 @@ export default function App() {
           {currentTab === "AI" && (
             <NavPage />
           )}
+
+          {currentTab === "Profile" && (
+            <ProfilePage isLearningLanguage={isLearningLanguage} />
+          )}
         </div>
         
         {/* Bottom Navigation */}
-        <BottomNavigation currentTab={currentTab} onTabChange={setCurrentTab} isLearningLanguage={isLearningLanguage} />
+        <BottomNavigation currentTab={currentTab} onTabChange={setCurrentTab} />
       </div>
     </div>
   );
