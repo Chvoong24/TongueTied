@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Flame, Edit2, Target, Award, Calendar, Check, BookOpen, Plus, Trash2, Bot, Video, Coffee } from "lucide-react";
+import { Flame, Edit2, Target, Award, Calendar, Check, BookOpen, Plus, Trash2, Bot, Video, Coffee, Globe, Compass } from "lucide-react";
 
 interface ProfilePageProps {
   isLearningLanguage?: boolean;
+  learningMode?: string;
+  onModeChange?: (mode: string) => void;
 }
 
 interface Goal {
@@ -11,7 +13,7 @@ interface Goal {
   target?: number;
 }
 
-export function ProfilePage({ isLearningLanguage }: ProfilePageProps) {
+export function ProfilePage({ isLearningLanguage, learningMode, onModeChange }: ProfilePageProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [goals, setGoals] = useState<Goal[]>([
     { text: isLearningLanguage ? "ビジネス敬語をマスターする" : "Master Business Keigo" },
@@ -56,13 +58,12 @@ export function ProfilePage({ isLearningLanguage }: ProfilePageProps) {
     setGoals([...goals, { text: goal.text, current: 0, target: goal.target }]);
   };
 
-  // Generate Calendar Days (April 2024 starts on a Monday and has 30 days)
-  // We use a 35-cell grid to cover the full week layout
-  const days = Array.from({ length: 35 }, (_, i) => {
-    if (i === 0) return null; // 1st cell is Sunday (Empty)
-    if (i > 30) return null;  // Stop at 30 days
-    return i;
-  });
+  // Setup Data for a scrollable monthly view tracking the 12-day streak up to April 8th
+  const monthsData = [
+    { name: isLearningLanguage ? "3月" : "March", offset: 5, days: 31, streakStart: 27, streakEnd: 31, interview: null },
+    { name: isLearningLanguage ? "4月" : "April", offset: 1, days: 30, streakStart: 1, streakEnd: 8, interview: 27 },
+    { name: isLearningLanguage ? "5月" : "May", offset: 3, days: 31, streakStart: null, streakEnd: null, interview: null }
+  ];
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F8FAFC] p-6 space-y-6 pb-24">
@@ -115,44 +116,98 @@ export function ProfilePage({ isLearningLanguage }: ProfilePageProps) {
         </div>
       </div>
 
-      {/* Practice Calendar */}
+      {/* Language Profile */}
       <div className="bg-white rounded-3xl p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.1)] border border-gray-100">
+        <div className="flex items-center gap-2 mb-4">
+          <Globe className="w-5 h-5 text-[#F59E0B]" />
+          <h2 className="font-semibold text-[#2D3A50]">{isLearningLanguage ? "言語プロファイル" : "Language Profile"}</h2>
+        </div>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between p-2.5 bg-gray-50 rounded-xl">
+            <span className="text-sm font-medium text-gray-500">{isLearningLanguage ? "母国語" : "Native"}</span>
+            <span className="text-sm font-bold text-[#2D3A50]">English</span>
+          </div>
+          <div className="flex items-center justify-between p-2.5 bg-[#E0F2FE]/50 rounded-xl border border-[#E0F2FE]">
+            <span className="text-sm font-medium text-[#0284C7]">{isLearningLanguage ? "学習中" : "Learning"}</span>
+            <span className="text-sm font-bold text-[#0284C7]">Japanese</span>
+          </div>
+          <div className="flex items-center justify-between p-2.5 bg-gray-50 rounded-xl">
+            <span className="text-sm font-medium text-gray-500">{isLearningLanguage ? "学びたい" : "Wants to Learn"}</span>
+            <span className="text-sm font-bold text-[#2D3A50]">Spanish</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Learning Purpose */}
+      <div className="bg-white rounded-3xl p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.1)] border border-gray-100">
+        <div className="flex items-center gap-2 mb-4">
+          <Compass className="w-5 h-5 text-[#8B5CF6]" />
+          <h2 className="font-semibold text-[#2D3A50]">{isLearningLanguage ? "学習目的" : "Learning Purpose"}</h2>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {["Travel", "Professional", "Mobility", "K-12"].map(mode => {
+            const labelEn = mode === "K-12" ? "Academics K-12" : mode;
+            let labelJa = mode;
+            if (mode === "Travel") labelJa = "旅行";
+            if (mode === "Professional") labelJa = "プロフェッショナル";
+            if (mode === "Mobility") labelJa = "モビリティ";
+            if (mode === "K-12") labelJa = "K-12 (学業)";
+            
+            return (
+              <button
+                key={mode}
+                onClick={() => onModeChange?.(mode)}
+                className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${learningMode === mode ? 'bg-[#3B8FA5] text-white shadow-md scale-105' : 'bg-gray-50 text-[#2D3A50]/70 hover:bg-gray-100'}`}
+              >
+                {isLearningLanguage ? labelJa : labelEn}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Practice Calendar */}
+      <div className="bg-white rounded-3xl p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Calendar className="w-5 h-5 text-[#8B5CF6]" />
-            <h2 className="font-semibold text-[#2D3A50]">{isLearningLanguage ? "4月の練習カレンダー" : "April Practice Calendar"}</h2>
+            <h2 className="font-semibold text-[#2D3A50]">{isLearningLanguage ? "練習カレンダー" : "Practice Calendar"}</h2>
           </div>
         </div>
         
-        {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-2 mb-2">
-          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-            <div key={`header-${i}`} className="text-center text-xs font-medium text-gray-400">{day}</div>
-          ))}
-          {days.map((day, i) => {
-            if (day === null) return <div key={`empty-${i}`} />;
-            
-            const isStreak = day >= 15 && day <= 26;
-            const isInterview = day === 27;
-            
+        {/* Scrollable Calendar Wrapper */}
+        <div className="flex overflow-x-auto gap-6 snap-x pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {monthsData.map((month, mIndex) => {
+            const cells = Array.from({ length: 42 }, (_, i) => {
+              const dayNum = i - month.offset + 1;
+              return (dayNum < 1 || dayNum > month.days) ? null : dayNum;
+            });
+
             return (
-              <div 
-                key={`day-${day}`} 
-                className={`
-                  aspect-square flex items-center justify-center rounded-full text-sm font-medium transition-all
-                  ${isStreak ? 'bg-[#FF6B6B] text-white shadow-sm' : ''}
-                  ${isInterview ? 'bg-[#3B8FA5] text-white ring-2 ring-offset-2 ring-[#3B8FA5] shadow-md scale-105' : ''}
-                  ${!isStreak && !isInterview ? 'text-[#2D3A50] bg-gray-50' : ''}
-                `}
-              >
-                {day}
+              <div key={mIndex} className="min-w-[250px] snap-center shrink-0">
+                <h3 className="text-center text-sm font-bold text-[#2D3A50]/70 mb-3">{month.name}</h3>
+                <div className="grid grid-cols-7 gap-1.5">
+                  {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+                    <div key={`header-${i}`} className="text-center text-[10px] font-bold text-gray-400">{day}</div>
+                  ))}
+                  {cells.map((day, i) => {
+                    if (day === null) return <div key={`empty-${i}`} />;
+                    const isStreak = month.streakStart !== null && day >= month.streakStart && day <= (month.streakEnd || 31);
+                    const isInterview = day === month.interview;
+                    return (
+                      <div key={`day-${day}`} className={`aspect-square flex items-center justify-center rounded-full text-xs font-medium transition-all ${isStreak ? 'bg-[#FF6B6B] text-white shadow-sm' : ''} ${isInterview ? 'bg-[#3B8FA5] text-white ring-2 ring-offset-2 ring-[#3B8FA5] shadow-md scale-105' : ''} ${!isStreak && !isInterview ? 'text-[#2D3A50] bg-gray-50' : ''}`}>
+                        {day}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             );
           })}
         </div>
         
         {/* Legend */}
-        <div className="flex items-center gap-4 mt-5 text-xs">
+        <div className="flex items-center gap-4 mt-4 text-xs border-t border-gray-100 pt-4">
           <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-[#FF6B6B]"></div><span className="text-gray-500">{isLearningLanguage ? "練習済み" : "Practiced"}</span></div>
           <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-[#3B8FA5]"></div><span className="text-gray-500">{isLearningLanguage ? "面接日" : "Interview"}</span></div>
         </div>

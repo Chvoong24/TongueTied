@@ -1,4 +1,4 @@
-import { Bot, Video, FileText, Coffee, Mic } from "lucide-react";
+import { Bot, Video, FileText, Coffee, Mic, Book } from "lucide-react";
 
 interface FeatureCardProps {
   icon: React.ReactNode;
@@ -28,38 +28,52 @@ function FeatureCard({ icon, title, subtitle, bgColor }: FeatureCardProps) {
   );
 }
 
-export function NavPage() {
+interface NavPageProps {
+  isLearningLanguage?: boolean;
+  learningMode?: string;
+}
+
+export function NavPage({ isLearningLanguage, learningMode }: NavPageProps) {
   return (
     <div className="px-6 mb-6">
       <div className="grid grid-cols-2 gap-4">
         <FeatureCard
           icon={<Bot className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title="AI Interview Simulation"
-          subtitle="Practice CV-based questions."
+          title={isLearningLanguage ? "フランクれいAI 面接シミュレーション" : "FranklyAI Interview Simulation"}
+          subtitle={isLearningLanguage ? "履歴書ベースの質問を練習する" : "Practice CV-based questions."}
           bgColor="#E0F2FE"
         />
-        <FeatureCard
-          icon={<Video className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title="Peer Practice (Guided)"
-          subtitle="Real-time conversation."
-          bgColor="#D1FAE5"
-        />
+        {learningMode === "K-12" ? (
+          <FeatureCard
+            icon={<Book className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
+            title={isLearningLanguage ? "短編小説と詩" : "Short Stories & Poetry"}
+            subtitle={isLearningLanguage ? "日本語の文学を読む" : "Read Japanese literature."}
+            bgColor="#D1FAE5"
+          />
+        ) : (
+          <FeatureCard
+            icon={<Video className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
+            title={isLearningLanguage ? "ピア・プラクティス" : "Peer Practice (Guided)"}
+            subtitle={isLearningLanguage ? "リアルタイムの会話" : "Real-time conversation."}
+            bgColor="#D1FAE5"
+          />
+        )}
         <FeatureCard
           icon={<FileText className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title="CV-to-Vocab Engine"
-          subtitle="Custom vocab from your resume."
+          title={isLearningLanguage ? "履歴書から語彙生成" : "CV-to-Vocab Engine"}
+          subtitle={isLearningLanguage ? "履歴書からカスタム語彙を作成" : "Custom vocab from your resume."}
           bgColor="#FEF3C7"
         />
         <FeatureCard
           icon={<Coffee className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title="Micro-Scenarios"
-          subtitle="Quick 2-min workplace chats."
+          title={isLearningLanguage ? "マイクロシナリオ" : "Micro-Scenarios"}
+          subtitle={isLearningLanguage ? "2分間の簡単な職場チャット" : "Quick 2-min workplace chats."}
           bgColor="#FEE2E2"
         />
         <FeatureCard
           icon={<Mic className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title="Pronunciation Lab"
-          subtitle="AI grading for pacing & tone."
+          title={isLearningLanguage ? "発音ラボ" : "Pronunciation Lab"}
+          subtitle={isLearningLanguage ? "AIによるペースとトーンの採点" : "AI grading for pacing & tone."}
           bgColor="#F3E8FF"
         />
       </div>

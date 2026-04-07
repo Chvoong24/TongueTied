@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { ProfileHeader, HeroCarousel, FeaturesGrid, BottomNavigation, 
-  ChatPage, NavPage, ProfilePage} from "./components";
+  ChatPage, NavPage, ProfilePage, CommunityPage} from "./components";
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState("Home");
   const [isLearningLanguage, setIsLearningLanguage] = useState(false);
+  const [learningMode, setLearningMode] = useState("Professional");
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-['Inter',sans-serif]">
@@ -19,25 +20,29 @@ export default function App() {
                 onToggleLanguage={() => setIsLearningLanguage((prev) => !prev)} 
               />
               <HeroCarousel isLearningLanguage={isLearningLanguage} />
-              <FeaturesGrid isLearningLanguage={isLearningLanguage} onTabChange={setCurrentTab} />
+              <FeaturesGrid isLearningLanguage={isLearningLanguage} onTabChange={setCurrentTab} learningMode={learningMode} />
             </>
           )}
 
           {currentTab === "Chat" && (
-            <ChatPage />
+            <ChatPage isLearningLanguage={isLearningLanguage} />
           )}
 
           {currentTab === "AI" && (
-            <NavPage />
+            <NavPage isLearningLanguage={isLearningLanguage} learningMode={learningMode} />
           )}
 
           {currentTab === "Profile" && (
-            <ProfilePage isLearningLanguage={isLearningLanguage} />
+            <ProfilePage isLearningLanguage={isLearningLanguage} learningMode={learningMode} onModeChange={setLearningMode} />
+          )}
+
+          {currentTab === "Community" && (
+            <CommunityPage isLearningLanguage={isLearningLanguage} learningMode={learningMode} />
           )}
         </div>
         
         {/* Bottom Navigation */}
-        <BottomNavigation currentTab={currentTab} onTabChange={setCurrentTab} />
+        <BottomNavigation currentTab={currentTab} onTabChange={setCurrentTab} isLearningLanguage={isLearningLanguage} />
       </div>
     </div>
   );

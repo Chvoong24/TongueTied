@@ -1,4 +1,4 @@
-import { Bot, Video, Target, Network } from "lucide-react";
+import { Bot, Video, Target, Network, Book, Library } from "lucide-react";
 
 interface FeatureCardProps {
   icon: React.ReactNode;
@@ -33,9 +33,10 @@ function FeatureCard({ icon, title, subtitle, bgColor, onClick }: FeatureCardPro
 interface FeaturesGridProps {
   isLearningLanguage?: boolean;
   onTabChange?: (tab: string) => void;
+  learningMode?: string;
 }
 
-export function FeaturesGrid({ isLearningLanguage, onTabChange }: FeaturesGridProps) {
+export function FeaturesGrid({ isLearningLanguage, onTabChange, learningMode }: FeaturesGridProps) {
   return (
     <div className="px-6 mb-6">
       <div className="grid grid-cols-2 gap-4">
@@ -46,13 +47,23 @@ export function FeaturesGrid({ isLearningLanguage, onTabChange }: FeaturesGridPr
           bgColor="#E0F2FE"
           onClick={() => onTabChange?.("AI")}
         />
-        <FeatureCard
-          icon={<Video className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title={isLearningLanguage ? "ピア・プラクティス" : "Peer Practice (Guided)"}
-          subtitle={isLearningLanguage ? "リアルタイムの会話" : "Real-time conversation."}
-          bgColor="#D1FAE5"
-          onClick={() => onTabChange?.("AI")}
-        />
+        {learningMode === "K-12" ? (
+          <FeatureCard
+            icon={<Book className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
+            title={isLearningLanguage ? "短編小説と詩" : "Short Stories & Poetry"}
+            subtitle={isLearningLanguage ? "日本語の文学を読む" : "Read Japanese literature."}
+            bgColor="#D1FAE5"
+            onClick={() => onTabChange?.("AI")}
+          />
+        ) : (
+          <FeatureCard
+            icon={<Video className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
+            title={isLearningLanguage ? "ピア・プラクティス" : "Peer Practice (Guided)"}
+            subtitle={isLearningLanguage ? "リアルタイムの会話" : "Real-time conversation."}
+            bgColor="#D1FAE5"
+            onClick={() => onTabChange?.("AI")}
+          />
+        )}
         <FeatureCard
           icon={<Target className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
           title={isLearningLanguage ? "語学検定" : "Proficiency Exams"}
@@ -60,13 +71,23 @@ export function FeaturesGrid({ isLearningLanguage, onTabChange }: FeaturesGridPr
           bgColor="#E9D5FF"
           onClick={() => onTabChange?.("Profile")}
         />
-        <FeatureCard
-          icon={<Network className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
-          title={isLearningLanguage ? "コミュニティハブ" : "Community Hub"}
-          subtitle={isLearningLanguage ? "ネットワーキングと趣味" : "Networking & Interests (Opt-In)."}
-          bgColor="#CFFAFE"
-          onClick={() => onTabChange?.("Community")}
-        />
+        {learningMode === "K-12" ? (
+          <FeatureCard
+            icon={<Library className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
+            title={isLearningLanguage ? "図書館リソース" : "Library Resources"}
+            subtitle={isLearningLanguage ? "パートナー校と安全" : "School partners & safety."}
+            bgColor="#CFFAFE"
+            onClick={() => onTabChange?.("Community")}
+          />
+        ) : (
+          <FeatureCard
+            icon={<Network className="w-6 h-6 text-[#2D3A50]" strokeWidth={2} />}
+            title={isLearningLanguage ? "コミュニティハブ" : "Community Hub"}
+            subtitle={isLearningLanguage ? "ネットワーキングと趣味" : "Networking & Interests (Opt-In)."}
+            bgColor="#CFFAFE"
+            onClick={() => onTabChange?.("Community")}
+          />
+        )}
       </div>
     </div>
   );
